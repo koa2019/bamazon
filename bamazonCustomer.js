@@ -20,6 +20,8 @@ connection.connect(function(err) {
     showProducts();
 });
 
+var inqurier = require("./inquirer");
+
 function showProducts() {
     connection.query("SELECT * FROM products", function(err, res) {
         if (err) throw err;
