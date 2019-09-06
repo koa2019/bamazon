@@ -11,5 +11,7 @@ inquirer.prompt([{
         message: "Enter the quantity you'd like to purchase"
     }
 ]).then(function(res) {
-    console.log(res)
-})
+    console.log('product id # ' + res.id);
+    console.log('Quantity requested ' + res.quantity);
+
+});
