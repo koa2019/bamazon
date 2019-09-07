@@ -2,7 +2,7 @@ var mysql = require("mysql2");
 
 var inquirer = require("inquirer");
 
-var id_user, quantity_user, id_db, quantity_db;
+var id_user, quantity_user, id_db, quantity_db, price, totalCost, newQuantity_db;
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -72,15 +72,34 @@ function placeOrder() {
     connection.query('SELECT id, quantity, price FROM products', function(err, res) {
         if (err) throw err;
 
+        id_db = res[3].id;
         quantity_db = res[3].quantity;
-        var price = res[3].price;
-        var totalCost = quantity_user * price;
+        price = res[3].price;
+        totalCost = quantity_user * price;
+        // newQuantity_db = quantity_db - quantity_user;
         quantity_db -= quantity_user;
 
-        console.log('Order Confirmation. ' +
-            '\nProduct id: ' + id_user + '\nQuantity: ' + quantity_user + '\nPrice per unit: $' + price +
-            '\nYour total is $' + totalCost);
 
-        connection.end();
+        var sql = 'UPDATE products SET quantity = ' + quantity_db + ' WHERE id = ' + id_db;
+        console.log(sql)
+        connection.query(sql, function(err, res) {
+            if (err) throw err;
+            // console.log(res);
+        });
+
+        console.log(res[3]);
+
+        orderConfirmation();
+
     });
+}
+
+function orderConfirmation() {
+    console.log('Order Confirmation. ' +
+        '\nProduct id:' + id_user +
+        '\nQuantity: ' + quantity_user +
+        '\nPrice per unit: $' + price +
+        '\nYour total is $' + totalCost);
+
+    connection.end();
 }
