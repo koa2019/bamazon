@@ -88,7 +88,7 @@ function placeOrder() {
             if (err) throw err;
             // console.log(res);
         });
-
+        console.log('Product Id: ' + id_db + ' Updated in Stock Quantity ' + quantity_db);
         orderConfirmation();
 
     });
@@ -96,7 +96,7 @@ function placeOrder() {
 
 function orderConfirmation() {
     console.log('Order Confirmation. ' +
-        '\nProduct id:' + id_user +
+        '\nProduct id: ' + id_user +
         '\nQuantity: ' + quantity_user +
         '\nPrice per unit: $' + price +
         '\nYour total is $' + totalCost);
