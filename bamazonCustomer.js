@@ -72,22 +72,22 @@ function placeOrder() {
     connection.query('SELECT id, quantity, price FROM products', function(err, res) {
         if (err) throw err;
 
-        id_db = res[3].id;
-        quantity_db = res[3].quantity;
-        price = res[3].price;
+        var x = id_user - 1;
+        id_db = res[x].id;
+        quantity_db = res[x].quantity;
+        price = res[x].price;
         totalCost = quantity_user * price;
         // newQuantity_db = quantity_db - quantity_user;
         quantity_db -= quantity_user;
 
 
         var sql = 'UPDATE products SET quantity = ' + quantity_db + ' WHERE id = ' + id_db;
-        console.log(sql)
+        console.log(sql);
+
         connection.query(sql, function(err, res) {
             if (err) throw err;
             // console.log(res);
         });
-
-        console.log(res[3]);
 
         orderConfirmation();
 
