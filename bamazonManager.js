@@ -20,8 +20,9 @@ connection.connect(function(err) {
     promptManager();
 });
 
+//console  menu selections
 function promptManager() {
-    //console  menu selections
+
     inqurier.prompt([{
 
         type: 'list',
@@ -31,7 +32,8 @@ function promptManager() {
 
     }]).then(function(resp) {
 
-        console.log(resp.menu);
+        console.log('\n###########################################');
+        console.log('You selected: ' + resp.menu + '\n');
         doThis(resp.menu);
 
     }).catch(function(err) {
@@ -60,38 +62,69 @@ function doThis(action) {
 
 function productsForSale() {
 
-    console.log('4 sale');
     showProducts();
-
 }
 
+//function will make a query to database & return requested fields
+//function will loop through array of objects in products table and 
+//will console which products have a quantity of less than 5  
 function lowInventory() {
 
     connection.query('SELECT id, product, quantity FROM products', function(err, resp) {
 
         if (err) throw err;
 
+        //loop through each item in products array
         for (var i = 0; i < resp.length; i++) {
 
             var x = resp[i];
-            var id = resp[i].id
+            var id = x.id
             var product = x.product;
             var numItems = x.quantity;
 
             if (numItems < 5) {
-                console.log('\n\n#####################################################');
-                console.log('Results for Low Inventory \nProducts with a count less than 5');
+                console.log('\n############ Results for Low Inventory ################');
+                console.log('Products with quantity less than 5');
                 console.log('Id: ' + id + ' Product: ' + product + ' Quantity: ' + numItems);
             };
-
-        }
+        };
     });
 }
 
 function addToInventory() {
 
-    console.log('add to ');
+    inqurier.prompt([{
+        type: 'input',
+        name: 'id',
+        message: "Enter product id to add to its in-stock quantity"
+    }, {
+        type: 'input',
+        name: 'addMore',
+        message: 'Enter the amount you want to add to quantity'
+    }]).then(function(resp) {
 
+        console.log('\n#####################################################');
+        console.log('Adding ' + resp.addMore + ' units to Id #' + resp.id);
+    }).catch(
+        function(err) {
+            console.log(err);
+            connection.end();
+        });
+}
+
+function updateInventory(id, newQuantity) {
+
+    var sql = 'UPDATE products SET quantity = ' + newQuantity + ' WHERE id = ' + id;
+    console.log(sql);
+    connection.query(sql, function(err, res) {
+
+        if (err) throw err;
+
+        console.log('\n############ Updated Inventory ################');
+        console.log(res);
+        console.log('Product Id: ' + id +
+            ' Updated Quantity: ' + newQuantity);
+    });
 }
 
 function addNewProd() {
