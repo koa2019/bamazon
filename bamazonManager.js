@@ -52,7 +52,7 @@ function doThis(action) {
             lowInventory();
             break;
         case 'Add to Inventory':
-            addToInventory();
+            addToQuantity();
             break;
         case 'Add New Product':
             addNewProd();
@@ -98,7 +98,7 @@ function lowInventory() {
 }
 
 //function will prompt user for 2 inputs & will return console.log of inputs and pass them to the updateInventory()
-function addToInventory() {
+function addToQuantity() {
 
     inqurier.prompt([{
         type: 'input',
@@ -179,13 +179,18 @@ function addNewProd() {
         var quantity = resp.quantity;
         var price = resp.price;
 
-        console.log(name + '--' + quantity + '--' + price);
-
+        addToDatabase(name, quantity, price);
 
     }).catch(function(err) {
         console.log(err);
         connection.end();
     });
+}
+
+function addToDatabase(product, quantity, price) {
+
+    console.log(product + '--' + quantity + '--' + price);
+
 }
 
 function showProducts() {
