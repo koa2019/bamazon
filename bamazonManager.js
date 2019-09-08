@@ -164,6 +164,11 @@ function addNewProd() {
         },
         {
             type: 'input',
+            name: 'dept',
+            message: "Enter Item's Department"
+        },
+        {
+            type: 'input',
             name: 'quantity',
             message: "Enter Item's Quantity"
         },
@@ -176,10 +181,11 @@ function addNewProd() {
     ]).then(function(resp) {
 
         var name = resp.product;
+        var dept = resp.dept;
         var quantity = resp.quantity;
         var price = resp.price;
 
-        addToDatabase(name, quantity, price);
+        addToDatabase(name, dept, quantity, price);
 
     }).catch(function(err) {
         console.log(err);
@@ -187,10 +193,18 @@ function addNewProd() {
     });
 }
 
-function addToDatabase(product, quantity, price) {
+function addToDatabase(product, dept, quantity, price) {
 
-    console.log(product + '--' + quantity + '--' + price);
+    var addMe = product + '", "' + dept + '", "' + price + '", "' + quantity;
+    var sql = 'INSERT INTO products (product, dept, price, quantity) VALUES ("' + addMe + '")';
+    console.log(sql);
 
+    connection.query(sql, function(err, resp) {
+
+        if (err) throw err;
+
+        console.log(resp);
+    });
 }
 
 function showProducts() {
