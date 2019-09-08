@@ -32,8 +32,8 @@ function promptManager() {
 
     }]).then(function(resp) {
 
-        console.log('\n###########################################');
-        console.log('You selected: ' + resp.menu + '\n');
+        // console.log('\n###########################################');
+        console.log('You selected: ' + resp.menu);
         doThis(resp.menu);
 
     }).catch(function(err) {
@@ -74,6 +74,10 @@ function lowInventory() {
 
         if (err) throw err;
 
+        console.log('\n------ Results for Products with quantity less than 5 ------');
+
+        var count = 0;
+
         //loop through each item in products array
         for (var i = 0; i < resp.length; i++) {
 
@@ -83,14 +87,17 @@ function lowInventory() {
             var numItems = x.quantity;
 
             if (numItems < 5) {
-                console.log('\n############ Results for Low Inventory ################');
-                console.log('Products with quantity less than 5');
+                count += 1;
                 console.log('Id: ' + id + ' Product: ' + product + ' Quantity: ' + numItems);
             };
+        };
+        if (count === 0) {
+            console.log('\nThere are no products with a quantity less than 5.')
         };
     });
 }
 
+//function will prompt user for 2 inputs & will return console.log of inputs and pass them to the updateInventory()
 function addToInventory() {
 
     inqurier.prompt([{
@@ -101,10 +108,16 @@ function addToInventory() {
         type: 'input',
         name: 'addMore',
         message: 'Enter the amount you want to add to quantity'
+
     }]).then(function(resp) {
 
-        console.log('\n#####################################################');
-        console.log('Adding ' + resp.addMore + ' units to Id #' + resp.id);
+        var addMore = resp.addMore;
+        var id = resp.id;
+
+        console.log('\n#################### Please Wait ################');
+        console.log('Adding ' + addMore + ' units to Id #' + id);
+        updateInventory(id, addMore);
+
     }).catch(
         function(err) {
             console.log(err);
@@ -112,6 +125,8 @@ function addToInventory() {
         });
 }
 
+//function accepts 2 paramaters & queries database with an update request
+//if req successful then consoles results of update
 function updateInventory(id, newQuantity) {
 
     var sql = 'UPDATE products SET quantity = ' + newQuantity + ' WHERE id = ' + id;
@@ -122,8 +137,7 @@ function updateInventory(id, newQuantity) {
 
         console.log('\n############ Updated Inventory ################');
         console.log(res);
-        console.log('Product Id: ' + id +
-            ' Updated Quantity: ' + newQuantity);
+        console.log(res.changedRows + ' Updated Row');
     });
 }
 
