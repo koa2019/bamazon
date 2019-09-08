@@ -199,11 +199,11 @@ function addToDatabase(product, dept, quantity, price) {
     var sql = 'INSERT INTO products (product, dept, price, quantity) VALUES ("' + addMe + '")';
     console.log(sql);
 
-    connection.query(sql, function(err, resp) {
+    connection.query(sql, function(err, results) {
 
         if (err) throw err;
 
-        console.log(resp);
+        console.log(results);
     });
 }
 
