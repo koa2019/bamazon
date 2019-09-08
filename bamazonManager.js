@@ -157,8 +157,35 @@ function showUpdatedProduct(id) {
 
 function addNewProd() {
 
-    console.log('add new');
+    inqurier.prompt([{
+            type: 'input',
+            name: 'product',
+            message: "Enter Item's Name"
+        },
+        {
+            type: 'input',
+            name: 'quantity',
+            message: "Enter Item's Quantity"
+        },
+        {
+            type: 'input',
+            name: 'price',
+            message: "Enter Item's Price in this format 123.99"
 
+        }
+    ]).then(function(resp) {
+
+        var name = resp.product;
+        var quantity = resp.quantity;
+        var price = resp.price;
+
+        console.log(name + '--' + quantity + '--' + price);
+
+
+    }).catch(function(err) {
+        console.log(err);
+        connection.end();
+    });
 }
 
 function showProducts() {
