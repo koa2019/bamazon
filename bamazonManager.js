@@ -115,7 +115,6 @@ function addToInventory() {
         var id = resp.id;
 
         console.log('\n#################### Please Wait ################');
-        console.log('Adding ' + addMore + ' units to Id #' + id);
         updateInventory(id, addMore);
 
     }).catch(
@@ -129,6 +128,8 @@ function addToInventory() {
 //if req successful then consoles results of update
 function updateInventory(id, newQuantity) {
 
+    console.log('Adding ' + newQuantity + ' units to Id #' + id);
+
     var sql = 'UPDATE products SET quantity = ' + newQuantity + ' WHERE id = ' + id;
     console.log(sql);
     connection.query(sql, function(err, res) {
@@ -136,8 +137,21 @@ function updateInventory(id, newQuantity) {
         if (err) throw err;
 
         console.log('\n############ Updated Inventory ################');
-        console.log(res);
-        console.log(res.changedRows + ' Updated Row');
+        // console.log(res);
+        console.log(res.affectedRows + ' Updated Row');
+        showUpdatedProduct(id);
+    });
+}
+
+function showUpdatedProduct(id) {
+
+    var id_db = id - 1;
+
+    connection.query('SELECT id, product, quantity FROM products', function(err, resp) {
+
+        if (err) throw err;
+
+        console.log(resp[id_db]);
     });
 }
 
