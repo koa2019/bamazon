@@ -67,8 +67,25 @@ function productsForSale() {
 
 function lowInventory() {
 
-    console.log('low stock');
+    connection.query('SELECT id, product, quantity FROM products', function(err, resp) {
 
+        if (err) throw err;
+
+        for (var i = 0; i < resp.length; i++) {
+
+            var x = resp[i];
+            var id = resp[i].id
+            var product = x.product;
+            var numItems = x.quantity;
+
+            if (numItems < 5) {
+                console.log('\n\n#####################################################');
+                console.log('Results for Low Inventory \nProducts with a count less than 5');
+                console.log('Id: ' + id + ' Product: ' + product + ' Quantity: ' + numItems);
+            };
+
+        }
+    });
 }
 
 function addToInventory() {
