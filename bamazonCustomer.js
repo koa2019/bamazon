@@ -52,28 +52,6 @@ function promptCustomer() {
         quantity_user = res.quantity;
 
         verifyUserInput();
-        // if (id_user > 10) {
-        //     console.log('Error. Product ID must be between 1 and 10');
-        //     return;
-        // };
-        // connection.query('SELECT id, quantity, price FROM products', function(err, res) {
-
-        //     if (err) throw err;
-        //     quantity_db = res[x].quantity;
-        //     console.log('quant db ' + quantity_db);
-
-        //     if (quantity_user > quantity_db || quantity_db <= 0) {
-
-        //         console.log("Sorry. Insufficient Quantity  avaiable for purchase.");
-        //     } else {
-        //         console.log('product id # ' + id_user);
-        //         console.log('Quantity requested ' + quantity_user);
-        //         placeOrder();
-
-        //     }
-        // });
-
-
 
     }).catch(function(err) {
         console.log(err);
