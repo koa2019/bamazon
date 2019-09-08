@@ -2,7 +2,7 @@ var mysql = require("mysql2");
 
 var inquirer = require("inquirer");
 
-var id_user, quantity_user, id_db, quantity_db, price, totalCost, newQuantity_db;
+var x, id_user, quantity_user, id_db, quantity_db, price, totalCost, newQuantity_db;
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -48,30 +48,30 @@ function promptCustomer() {
     ]).then(function(res) {
 
         id_user = res.id;
-        var x = id_user - 1;
+        x = id_user - 1;
         quantity_user = res.quantity;
 
-        if (id_user > 10) {
-            console.log('Error. Product ID must be between 1 and 10');
-            connection.end()
-        };
-        connection.query('SELECT id, quantity, price FROM products', function(err, res) {
+        verifyUserInput();
+        // if (id_user > 10) {
+        //     console.log('Error. Product ID must be between 1 and 10');
+        //     return;
+        // };
+        // connection.query('SELECT id, quantity, price FROM products', function(err, res) {
 
-            if (err) throw err;
-            quantity_db = res[x].quantity;
-            console.log('quant db ' + quantity_db);
+        //     if (err) throw err;
+        //     quantity_db = res[x].quantity;
+        //     console.log('quant db ' + quantity_db);
 
-            if (quantity_user > quantity_db || quantity_db <= 0) {
+        //     if (quantity_user > quantity_db || quantity_db <= 0) {
 
-                console.log("Sorry. Insufficient Quantity  avaiable for purchase.");
-                connection.end();
-            } else {
-                console.log('product id # ' + id_user);
-                console.log('Quantity requested ' + quantity_user);
-                placeOrder();
+        //         console.log("Sorry. Insufficient Quantity  avaiable for purchase.");
+        //     } else {
+        //         console.log('product id # ' + id_user);
+        //         console.log('Quantity requested ' + quantity_user);
+        //         placeOrder();
 
-            }
-        });
+        //     }
+        // });
 
 
 
@@ -79,6 +79,33 @@ function promptCustomer() {
         console.log(err);
         connection.end();
     });
+}
+
+function verifyUserInput() {
+
+    if (id_user > 10) {
+        console.log('Error. Product ID must be between 1 and 10');
+        return;
+    };
+    connection.query('SELECT id, quantity FROM products', function(err, res) {
+
+        if (err) throw err;
+
+        quantity_db = res[x].quantity;
+
+        if (quantity_user > quantity_db || quantity_db <= 0) {
+
+            console.log("Sorry. Insufficient Quantity avaiable for purchase.");
+            console.log('Product id: ' + id_user + ' unfortunately has ' + quantity_db + ' units in-stock. ');
+
+        } else {
+            console.log('product id # ' + id_user);
+            console.log('Quantity requested ' + quantity_user);
+            placeOrder();
+
+        }
+    });
+
 }
 
 function placeOrder() {
