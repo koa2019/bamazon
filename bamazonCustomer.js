@@ -46,21 +46,35 @@ function promptCustomer() {
             message: "Enter the quantity you'd like to purchase"
         }
     ]).then(function(res) {
+
         id_user = res.id;
+        var x = id_user - 1;
         quantity_user = res.quantity;
 
         if (id_user > 10) {
             console.log('Error. Product ID must be between 1 and 10');
-            connection.end();
-        } else if (quantity_user > 70) {
-            console.log("Sorry. Insufficient Quantity  avaiable for purchase.");
-            connection.end();
-        } else {
-            console.log('product id # ' + id_user);
-            console.log('Quantity requested ' + quantity_user);
-            placeOrder();
+            connection.end()
+        };
+        connection.query('SELECT id, quantity, price FROM products', function(err, res) {
 
-        }
+            if (err) throw err;
+            quantity_db = res[x].quantity;
+            console.log('quant db ' + quantity_db);
+
+            if (quantity_user > quantity_db || quantity_db <= 0) {
+
+                console.log("Sorry. Insufficient Quantity  avaiable for purchase.");
+                connection.end();
+            } else {
+                console.log('product id # ' + id_user);
+                console.log('Quantity requested ' + quantity_user);
+                placeOrder();
+
+            }
+        });
+
+
+
     }).catch(function(err) {
         console.log(err);
         connection.end();
@@ -76,7 +90,6 @@ function placeOrder() {
         quantity_db = res[x].quantity;
         price = res[x].price;
         totalCost = quantity_user * price;
-        // newQuantity_db = quantity_db - quantity_user;
         quantity_db -= quantity_user;
 
 
@@ -87,14 +100,15 @@ function placeOrder() {
             if (err) throw err;
             // console.log(res);
         });
-        console.log('Product Id: ' + id_db + ' Updated in Stock Quantity ' + quantity_db);
+        console.log('\n---------------------------------------------');
+        console.log('Product Id: ' + id_db + ' Updated in-Stock Quantity: ' + quantity_db);
         orderConfirmation();
 
     });
 }
 
 function orderConfirmation() {
-    console.log('Order Confirmation. ' +
+    console.log('\n---------Order Confirmation--------- ' +
         '\nProduct id: ' + id_user +
         '\nQuantity: ' + quantity_user +
         '\nPrice per unit: $' + price +
