@@ -17,7 +17,6 @@ var connection = mysql.createConnection({
 connection.connect(function(err) {
     if (err) throw err;
     console.log('Success. Connection id: ' + connection.threadId);
-    // showProducts();
     promptManager();
 });
 
@@ -62,6 +61,8 @@ function doThis(action) {
 function productsForSale() {
 
     console.log('4 sale');
+    showProducts();
+
 }
 
 function lowInventory() {
